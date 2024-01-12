@@ -128,7 +128,7 @@
             const memeImage = document.getElementById('meme-image');
             const messagePopup = document.getElementById('messagePopup');
 
-            if (!memeImage.src || memeImage.src === 'data:,') {
+            if (!memeImage.complete || memeImage.naturalWidth === 0) {
                 // Mostrar el mensaje emergente si no se ha detectado una imagen cargada
                 messagePopup.style.display = 'block';
                 setTimeout(() => {
