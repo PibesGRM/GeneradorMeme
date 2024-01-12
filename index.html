@@ -148,19 +148,10 @@
             await new Promise(resolve => setTimeout(resolve, 100));
 
             // Utilizar html2canvas para convertir el contenido del contenedor en una imagen
-            const canvas = await html2canvas(memeContainer);
-
-            // Obtener el contexto del lienzo
-            const context = canvas.getContext('2d');
-
-            // Aplicar texto superior
-            context.font = '20px Arial';
-            context.fillStyle = 'white';
-            context.textAlign = 'center';
-            context.fillText(textTop, canvas.width / 2, 30);
-
-            // Aplicar texto inferior
-            context.fillText(textBottom, canvas.width / 2, canvas.height - 10);
+            const canvas = await html2canvas(memeContainer, {
+                width: memeImage.width,
+                height: memeImage.height,
+            });
 
             // Crear un enlace para descargar la imagen
             const link = document.createElement('a');
