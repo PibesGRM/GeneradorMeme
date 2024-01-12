@@ -102,13 +102,6 @@
             border-radius: 5px;
             z-index: 999;
         }
-
-        footer {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: rgba(76, 175, 80, 0.8);
-            color: white;
-        }
     </style>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
@@ -125,19 +118,8 @@
     <input type="file" id="upload" accept="image/*" onchange="loadImage(this)">
     
     <button onclick="generateMeme()">Generar Meme</button>
-    <button onclick="copyToClipboard()">Copiar Imagen al Portapapeles</button>
 
     <div class="message-popup" id="messagePopup">No se ha detectado imagen cargada</div>
-
-    <footer>
-        <p>
-            Este sitio ha sido creado por DonPeyote. Las imágenes no son nuestra responsabilidad y nuestra herramienta debe usarse de forma responsable.
-            <br>
-            Fecha: 12 de enero de 2024
-            <br>
-            Generador de Memes
-        </p>
-    </footer>
 
     <script>
         async function generateMeme() {
@@ -180,8 +162,11 @@
             // Aplicar texto inferior
             context.fillText(textBottom, canvas.width / 2, canvas.height - 10);
 
-            // Actualizar la imagen generada en el contenedor
-            memeImage.src = canvas.toDataURL();
+            // Crear un enlace para descargar la imagen
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL();
+            link.download = 'meme.png';
+            link.click();
         }
 
         function loadImage(input) {
@@ -198,33 +183,15 @@
                 reader.readAsDataURL(file);
             }
         }
-
-        function copyToClipboard() {
-            const canvas = document.createElement('canvas');
-            const memeContainer = document.getElementById('meme-container');
-            const textTop = document.getElementById('text-top').innerText;
-            const textBottom = document.getElementById('text-bottom').innerText;
-
-            // Obtener el contexto del lienzo
-            const context = canvas.getContext('2d');
-            canvas.width = memeContainer.clientWidth;
-            canvas.height = memeContainer.clientHeight;
-
-            // Aplicar texto superior
-            context.font = '20px Arial';
-            context.fillStyle = 'white';
-            context.textAlign = 'center';
-            context.fillText(textTop, canvas.width / 2, 30);
-
-            // Aplicar texto inferior
-            context.fillText(textBottom, canvas.width / 2, canvas.height - 10);
-
-            // Crear un enlace para copiar la imagen al portapapeles
-            canvas.toBlob(blob => {
-                const item = new ClipboardItem({ 'image/png': blob });
-                navigator.clipboard.write([item]);
-            });
-        }
     </script>
+<footer>
+    <p style="color: white;">
+        Este sitio ha sido creado por DonPeyote. Las imágenes no son nuestra responsabilidad y nuestra herramienta debe usarse de forma responsable.
+        <br>
+        Fecha: 12 de enero de 2024
+        <br>
+        Generador de Memes
+    </p>
+</footer>
 </body>
 </html>
