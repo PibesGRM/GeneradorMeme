@@ -439,55 +439,57 @@ var WikiquoteApi = (function() {
 
     
     <script>
-    async function generateMeme() {
-        const memeContainer = document.getElementById('meme-container');
-        const textTop = document.getElementById('text-top').innerText;
-        const textBottom = document.getElementById('text-bottom').innerText;
-        const memeImage = document.getElementById('meme-image');
-        const messagePopup = document.getElementById('messagePopup');
-        const textColor = document.getElementById('text-color').value;
 
-        if (!memeImage.complete || memeImage.naturalWidth === 0) {
-            // Mostrar el mensaje emergente si no se ha detectado una imagen cargada
-            messagePopup.style.display = 'block';
-            setTimeout(() => {
-                messagePopup.style.display = 'none';
-            }, 3000);
-            return;
+        async function generateMeme() {
+            const memeContainer = document.getElementById('meme-container');
+            const textTop = document.getElementById('text-top').innerText;
+            const textBottom = document.getElementById('text-bottom').innerText;
+            const memeImage = document.getElementById('meme-image');
+            const messagePopup = document.getElementById('messagePopup');
+            const textColor = document.getElementById('text-color').value;
+
+            if (!memeImage.complete || memeImage.naturalWidth === 0) {
+                // Mostrar el mensaje emergente si no se ha detectado una imagen cargada
+                messagePopup.style.display = 'block';
+                setTimeout(() => {
+                    messagePopup.style.display = 'none';
+                }, 3000);
+                return;
+            }
+
+            // Cargar la imagen en un elemento de imagen antes de usar html2canvas
+            await new Promise(resolve => {
+                memeImage.onload = resolve;
+                memeImage.src = memeImage.src;  // Esto fuerza la carga de la imagen
+            });
+
+            // Esperar 100 milisegundos antes de generar el meme
+            await new Promise(resolve => setTimeout(resolve, 100));
+
+            // Crear un lienzo del mismo tamaño que la imagen
+            const canvas = document.createElement('canvas');
+            canvas.width = memeImage.width;
+            canvas.height = memeImage.height;
+            const context = canvas.getContext('2d');
+
+            // Dibujar la imagen en el lienzo
+            context.drawImage(memeImage, 0, 0, memeImage.width, memeImage.height);
+
+            // Aplicar texto superior
+            context.font = '20px Arial';
+            context.textAlign = 'center';
+            context.fillStyle = textColor;  // Usar el color seleccionado
+            context.fillText(textTop, canvas.width / 2, 30);
+
+            // Aplicar texto inferior
+            context.fillText(textBottom, canvas.width / 2, canvas.height - 10);
+
+            // Crear un enlace para descargar la imagen
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL();
+            link.download = 'meme.png';
+            link.click();
         }
-
-        // Cargar la imagen en un elemento de imagen antes de usar html2canvas
-        await new Promise(resolve => {
-            memeImage.onload = resolve;
-            memeImage.src = memeImage.src;  // Esto fuerza la carga de la imagen
-        });
-
-        // Esperar 100 milisegundos antes de generar el meme
-        await new Promise(resolve => setTimeout(resolve, 100));
-
-        // Crear un lienzo del mismo tamaño que la imagen
-        const canvas = document.createElement('canvas');
-        canvas.width = memeImage.width;
-        canvas.height = memeImage.height;
-        const context = canvas.getContext('2d');
-
-        // Dibujar la imagen en el lienzo
-        context.drawImage(memeImage, 0, 0, memeImage.width, memeImage.height);
-
-        // Aplicar texto superior
-        context.font = '20px Arial';
-        context.fillStyle = 'white';
-        context.textAlign = 'center';
-        context.fillText(textTop, canvas.width / 2, 30);
-
-        // Aplicar texto inferior
-        context.fillText(textBottom, canvas.width / 2, canvas.height - 10);
-
-        // Crear un enlace para descargar la imagen
-        const link = document.createElement('a');
-        link.href = canvas.toDataURL();
-        link.download = 'meme.png';
-        link.click();
     }
 
     function loadImage(input) {
