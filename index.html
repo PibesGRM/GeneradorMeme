@@ -486,11 +486,23 @@ var WikiquoteApi = (function() {
             reader.readAsDataURL(file);
         }
     }
-async function getRandomQuote() {
-            try {
-                const searchQuery = "Albert Einstein";
-                await new Promise((resolve) => {
-                    WikiquoteApi.getRandomQuote(searchQuery, function (result) {
+
+
+	            // Función para buscar citas y autores
+async function searchQuotes() {
+    try {
+        const author = document.getElementById('authorSearch').value;
+        if (!author) {
+            alert('Por favor, ingrese un nombre de autor.');
+            return;
+        }
+
+        await new Promise((resolve) => {
+            WikiquoteApi.openSearch(author, function (results) {
+                if (results.length > 0) {
+                    // Tomar el primer resultado de la búsqueda como el autor
+                    const searchAuthor = results[0];
+                    WikiquoteApi.getRandomQuote(searchAuthor, function (result) {
                         // Mostrar la cita y el autor en el contenedor
                         document.getElementById('quote').textContent = `"${result.quote}"`;
                         document.getElementById('autor').textContent = result.titles;
@@ -499,11 +511,19 @@ async function getRandomQuote() {
                         console.error(error);
                         resolve();
                     });
-                });
-            } catch (error) {
-                console.error("Error inesperado:", error);
-            }
-        }
+                } else {
+                    alert('No se encontraron resultados para ese autor.');
+                    resolve();
+                }
+            }, function (error) {
+                console.error(error);
+                resolve();
+            });
+        });
+    } catch (error) {
+        console.error("Error inesperado:", error);
+    }
+}
 
 
         
