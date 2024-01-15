@@ -35,7 +35,7 @@
         }
     	#text-top, #text-bottom {
         max-width: 80%;
-        font-size: 2vw;
+        font-size: 3vw;
         white-space: normal; /* Permitir que el texto salte de línea automáticamente */
         overflow: hidden;
         text-overflow: ellipsis;
@@ -163,10 +163,7 @@
         <div id="text-top" class="meme-text" contenteditable="true">Texto superior</div>
         <div id="text-bottom" class="meme-text" contenteditable="true">Texto inferior</div>
     </div>
-    <div id="color-panel">
-    <label for="text-color">Color del Texto:</label>
-    <input type="color" id="text-color" value="#ffffff">
-</div>
+    
     <label for="upload">Cargar Imagen</label>
     <input type="file" id="upload" accept="image/*" onchange="loadImage(this)">
     
@@ -439,78 +436,56 @@ var WikiquoteApi = (function() {
 
     
     <script>
+    async function generateMeme() {
+        const memeContainer = document.getElementById('meme-container');
+        const textTop = document.getElementById('text-top').innerText;
+        const textBottom = document.getElementById('text-bottom').innerText;
+        const memeImage = document.getElementById('meme-image');
+        const messagePopup = document.getElementById('messagePopup');
 
-	async function generateMeme() {
-	    const memeContainer = document.getElementById('meme-container');
-	    const textTop = document.getElementById('text-top').innerText;
-	    const textBottom = document.getElementById('text-bottom').innerText;
-	    const memeImage = document.getElementById('meme-image');
-	    const messagePopup = document.getElementById('messagePopup');
-	    const textColor = document.getElementById('text-color').value;
-
-            if (!memeImage.complete || memeImage.naturalWidth === 0) {
-                // Mostrar el mensaje emergente si no se ha detectado una imagen cargada
-                messagePopup.style.display = 'block';
-                setTimeout(() => {
-                    messagePopup.style.display = 'none';
-                }, 3000);
-                return;
-            }
-
-            // Cargar la imagen en un elemento de imagen antes de usar html2canvas
-             await new Promise(resolve => {
-                memeImage.onload = resolve;
-                memeImage.src = memeImage.src;  // Esto fuerza la carga de la imagen
-            });
-
-            // Esperar 100 milisegundos antes de generar el meme
-            await new Promise(resolve => setTimeout(resolve, 100));
-
-            // Crear un lienzo del mismo tamaño que la imagen
-            const canvas = document.createElement('canvas');
-            canvas.width = memeImage.width;
-            canvas.height = memeImage.height;
-            const context = canvas.getContext('2d');
-
-            // Dibujar la imagen en el lienzo
-            context.drawImage(memeImage, 0, 0, memeImage.width, memeImage.height);
-
-            // Aplicar texto superior
-      	    context.font = '20px Arial';
-            context.textAlign = 'center';
-            context.fillStyle = textColor;  // Usar el color seleccionado
-            wrapText(context, textTop, canvas.width / 2, 30, canvas.width - 20, 25);
-
-            // Aplicar texto inferior
-            wrapText(context, textBottom, canvas.width / 2, canvas.height - 10, canvas.width - 20, 25);
-
-            // Crear un enlace para descargar la imagen
-            const link = document.createElement('a');
-            link.href = canvas.toDataURL();
-            link.download = 'meme.png';
-            link.click();
+        if (!memeImage.complete || memeImage.naturalWidth === 0) {
+            // Mostrar el mensaje emergente si no se ha detectado una imagen cargada
+            messagePopup.style.display = 'block';
+            setTimeout(() => {
+                messagePopup.style.display = 'none';
+            }, 3000);
+            return;
         }
+
+        // Cargar la imagen en un elemento de imagen antes de usar html2canvas
+        await new Promise(resolve => {
+            memeImage.onload = resolve;
+            memeImage.src = memeImage.src;  // Esto fuerza la carga de la imagen
+        });
+
+        // Esperar 100 milisegundos antes de generar el meme
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        // Crear un lienzo del mismo tamaño que la imagen
+        const canvas = document.createElement('canvas');
+        canvas.width = memeImage.width;
+        canvas.height = memeImage.height;
+        const context = canvas.getContext('2d');
+
+        // Dibujar la imagen en el lienzo
+        context.drawImage(memeImage, 0, 0, memeImage.width, memeImage.height);
+
+        // Aplicar texto superior
+        context.font = '20px Arial';
+        context.fillStyle = 'white';
+        context.textAlign = 'center';
+        context.fillText(textTop, canvas.width / 2, 30);
+
+        // Aplicar texto inferior
+        context.fillText(textBottom, canvas.width / 2, canvas.height - 10);
+
+        // Crear un enlace para descargar la imagen
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL();
+        link.download = 'meme.png';
+        link.click();
     }
- function wrapText(context, text, x, y, maxWidth, lineHeight) {
-            const words = text.split(' ');
-            let line = '';
-            
-            for(let n = 0; n < words.length; n++) {
-                const testLine = line + words[n] + ' ';
-                const metrics = context.measureText(testLine);
-                const testWidth = metrics.width;
 
-                if (testWidth > maxWidth && n > 0) {
-                    context.fillText(line, x, y);
-                    line = words[n] + ' ';
-                    y += lineHeight;
-                } else {
-                    line = testLine;
-                }
-            }
-            
-            context.fillText(line, x, y);
-        }
     function loadImage(input) {
         const memeImage = document.getElementById('meme-image');
         const file = input.files[0];
@@ -564,19 +539,6 @@ async function searchQuotes() {
     }
 }
 
-        // Función para cambiar color texto
-   document.getElementById('text-color').addEventListener('input', function () {
-        const textColor = this.value;
-        applyTextColor(textColor);
-    });
-
-    function applyTextColor(color) {
-        const textTop = document.getElementById('text-top');
-        const textBottom = document.getElementById('text-bottom');
-
-        textTop.style.color = color;
-        textBottom.style.color = color;
-    }
 
         
         // Función para actualizar la fecha en el footer
