@@ -123,58 +123,60 @@
 
     <script>
         async function generateMeme() {
-    const memeContainer = document.getElementById('meme-container');
-    const textTop = document.getElementById('text-top').innerText;
-    const textBottom = document.getElementById('text-bottom').innerText;
-    const memeImage = document.getElementById('meme-image');
-    const messagePopup = document.getElementById('messagePopup');
+            const memeContainer = document.getElementById('meme-container');
+            const textTop = document.getElementById('text-top').innerText;
+            const textBottom = document.getElementById('text-bottom').innerText;
+            const memeImage = document.getElementById('meme-image');
+            const messagePopup = document.getElementById('messagePopup');
 
-    if (!memeImage.complete || memeImage.naturalWidth === 0) {
-        // Mostrar el mensaje emergente si no se ha detectado una imagen cargada
-        messagePopup.style.display = 'block';
-        setTimeout(() => {
-            messagePopup.style.display = 'none';
-        }, 3000);
-        return;
+        if (!memeImage.complete || memeImage.naturalWidth === 0) {
+            // Mostrar el mensaje emergente si no se ha detectado una imagen cargada
+            messagePopup.style.display = 'block';
+            setTimeout(() => {
+                messagePopup.style.display = 'none';
+            }, 3000);
+            return;
+        }
+
+        // Cargar la imagen en un elemento de imagen antes de usar html2canvas
+        await new Promise(resolve => {
+            memeImage.onload = resolve;
+            memeImage.src = memeImage.src;  // Esto fuerza la carga de la imagen
+        });
+
+        // Esperar 100 milisegundos antes de generar el meme
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        // Obtener el ancho y alto de la imagen original
+        const imageWidth = memeImage.width;
+        const imageHeight = memeImage.height;
+
+        // Utilizar html2canvas para convertir el contenido del contenedor en una imagen
+        const canvas = await html2canvas(memeContainer, { width: imageWidth, height: imageHeight });
+
+        // Crear un enlace para descargar la imagen
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL();
+        link.download = 'meme.png';
+        link.click();
     }
 
-    // Cargar la imagen en un elemento de imagen antes de usar html2canvas
-    await new Promise(resolve => {
-        memeImage.onload = resolve;
-        memeImage.src = memeImage.src;  // Esto fuerza la carga de la imagen
-    });
+    function loadImage(input) {
+        const memeImage = document.getElementById('meme-image');
+        const file = input.files[0];
 
-    // Esperar 100 milisegundos antes de generar el meme
-    await new Promise(resolve => setTimeout(resolve, 100));
+        if (file) {
+            const reader = new FileReader();
 
-    // Utilizar html2canvas para convertir el contenido del contenedor en una imagen
-    const canvas = await html2canvas(memeContainer, {
-        width: memeImage.width,  // Establecer el ancho del lienzo igual al ancho de la imagen
-        height: memeImage.height,  // Establecer la altura del lienzo igual a la altura de la imagen
-    });
+            reader.onload = function (e) {
+                memeImage.src = e.target.result;
+            };
 
-    // Crear un enlace para descargar la imagen
-    const link = document.createElement('a');
-    link.href = canvas.toDataURL();
-    link.download = 'meme.png';
-    link.click();
-}
-
-        function loadImage(input) {
-            const memeImage = document.getElementById('meme-image');
-            const file = input.files[0];
-
-            if (file) {
-                const reader = new FileReader();
-
-                reader.onload = function (e) {
-                    memeImage.src = e.target.result;
-                };
-
-                reader.readAsDataURL(file);
-            }
+            reader.readAsDataURL(file);
         }
-    </script>
+    }
+</script>
+
 <footer>
     <p style="color: white;">
         Este sitio ha sido creado por DonPeyote. Las imágenes no son nuestra responsabilidad y nuestra herramienta debe usarse de forma responsable.
