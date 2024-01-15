@@ -103,6 +103,8 @@
             z-index: 999;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="frasesdia.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
 <body>
@@ -121,6 +123,8 @@
 
     <div class="message-popup" id="messagePopup">No se ha detectado imagen cargada</div>
       
+    <button onclick="getRandomQuote()">Obtener Cita Aleatoria</button>
+
     <script>
     async function generateMeme() {
         const memeContainer = document.getElementById('meme-container');
@@ -186,6 +190,18 @@
             reader.readAsDataURL(file);
         }
     }
+// Contenido de frasesdia.js
+async function getRandomQuote() {
+    const searchQuery = "Albert Einstein"; // Puedes cambiar esto a la búsqueda que desees
+    WikiquoteApi.getRandomQuote(searchQuery, function(result) {
+        // Manejar el resultado aquí, por ejemplo, mostrar la cita en la consola
+        console.log(result);
+    }, function(error) {
+        // Manejar el error aquí
+        console.error(error);
+    });
+}
+
         // Función para actualizar la fecha en el footer
     function updateFooterDate() {
         const footerDate = document.getElementById('footer-date');
