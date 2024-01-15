@@ -186,13 +186,24 @@
             reader.readAsDataURL(file);
         }
     }
+        // Función para actualizar la fecha en el footer
+    function updateFooterDate() {
+        const footerDate = document.getElementById('footer-date');
+        const currentDate = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const formattedDate = currentDate.toLocaleDateString('es-ES', options);
+        footerDate.textContent = formattedDate;
+    }
+
+    // Actualizar la fecha al cargar la página
+    updateFooterDate();
 </script>
 
 <footer>
     <p style="color: white;">
         Este sitio ha sido creado por DonPeyote. Las imágenes no son nuestra responsabilidad y nuestra herramienta debe usarse de forma responsable.
         <br>
-        Fecha: 12 de enero de 2024
+        <span id="footer-date"></span>
         <br>
         Generador de Memes
     </p>
