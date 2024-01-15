@@ -120,6 +120,9 @@
     <button onclick="generateMeme()">Generar Meme</button>
 
     <div class="message-popup" id="messagePopup">No se ha detectado imagen cargada</div>
+      
+    <!-- Nuevo elemento para mostrar la frase del día -->
+    <div id="frase-del-dia" style="color: white; margin-top: 20px;"></div>
 
     <script>
     async function generateMeme() {
@@ -199,6 +202,11 @@
     window.onload = function () {
         updateFooterDate();
     };
+
+// Mostrar la frase del día en el nuevo elemento
+            const fraseDelDiaElement = document.getElementById('frase-del-dia');
+            fraseDelDiaElement.textContent = JSON.parse(xhr.responseText).phrase;
+        }
 </script>
 <footer>
     <p style="color: white;">
