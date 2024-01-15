@@ -170,12 +170,16 @@
 </div>
 
     
-    <script>
+        <script>
+/*
+  * WIKIQUOTE JS API FROM 
+  * https://github.com/natetyler/wikiquotes-api/blob/master/wikiquote-api.js
+  */
 var WikiquoteApi = (function() {
 
   var wqa = {};
 
-  var API_URL = "https://es.wikiquote.org/w/api.php";
+  var API_URL = "https://es.wikiquote.org/w/api.php";//change to spanish url api
 
   /**
    * Query based on "titles" parameter and return page id.
@@ -297,7 +301,7 @@ var WikiquoteApi = (function() {
         var $lis = $(quotes).find('li:not(li li)');
         $lis.each(function() {
           // Remove all children that aren't <b>
-          $(this).children().remove(':not(b)');
+          $(this).children().remove(':not(b)');//elimina tags q pueden ser necesarios en la interpretacion de la cita
           var $bolds = $(this).find('b');
 
           // If the section has bold text, use it.  Otherwise pull the plain text.
