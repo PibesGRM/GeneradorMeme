@@ -148,19 +148,10 @@
             await new Promise(resolve => setTimeout(resolve, 100));
 
             // Utilizar html2canvas para convertir el contenido del contenedor en una imagen
-            const canvas = await html2canvas(memeContainer);
-
-            // Obtener el contexto del lienzo
-            const context = canvas.getContext('2d');
-
-            // Aplicar texto superior
-            context.font = '20px Arial';
-            context.fillStyle = 'white';
-            context.textAlign = 'center';
-            context.fillText(textTop, canvas.width / 2, 30);
-
-            // Aplicar texto inferior
-            context.fillText(textBottom, canvas.width / 2, canvas.height - 10);
+            const canvas = await html2canvas(memeContainer, {
+                width: memeImage.width,  // Establecer el ancho del lienzo igual al ancho de la imagen
+                height: memeImage.height,  // Establecer la altura del lienzo igual a la altura de la imagen
+            });
 
             // Crear un enlace para descargar la imagen
             const link = document.createElement('a');
@@ -184,5 +175,14 @@
             }
         }
     </script>
+<footer>
+    <p style="color: white;">
+        Este sitio ha sido creado por DonPeyote. Las imágenes no son nuestra responsabilidad y nuestra herramienta debe usarse de forma responsable.
+        <br>
+        Fecha: 12 de enero de 2024
+        <br>
+        Generador de Memes
+    </p>
+</footer>
 </body>
 </html>
