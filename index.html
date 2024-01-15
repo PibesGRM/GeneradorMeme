@@ -103,25 +103,34 @@
             z-index: 999;
         }
         
-        <style>
-        h1, p {
-            color: white;
-        }
+     <style>
+    h1, p {
+        color: white;
+    }
 
-        #quote {
-            font-size: 2em;
-            text-align: center;
-        }
+    .quote-container {
+        background-color: white;
+        padding: 15px;
+        border-radius: 10px;
+        max-width: 50%;
+        margin: auto;
+    }
 
-        .card-body {
-            margin: 30px;
-        }
+    #quote {
+        font-size: 1em; /* Ajusta el tamaño según sea necesario */
+        text-align: center;
+        color: black; /* Cambia el color del texto a negro */
+    }
 
-        .card-body > span {
-            text-align: right;
-            font-size: 1.5em;
-        }
-    </style>
+    .card-body {
+        margin: 30px;
+    }
+
+    .card-body > span {
+        text-align: right;
+        font-size: 1.5em;
+    }
+</style>
     
     </style>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -157,7 +166,7 @@ var WikiquoteApi = (function() {
 
   var wqa = {};
 
-  var API_URL = "https://en.wikiquote.org/w/api.php";
+  var API_URL = "https://es.wikiquote.org/w/api.php";
 
   /**
    * Query based on "titles" parameter and return page id.
