@@ -167,8 +167,6 @@
     <label for="text-color">Color del Texto:</label>
     <input type="color" id="text-color" value="#ffffff">
 </div>
-    <input type="color" id="text-color" value="#ffffff"> <!-- Agregado: Selector de color -->
-
     <label for="upload">Cargar Imagen</label>
     <input type="file" id="upload" accept="image/*" onchange="loadImage(this)">
     
@@ -442,7 +440,7 @@ var WikiquoteApi = (function() {
     
     <script>
 
-        async function generateMeme() {
+async function generateMeme() {
             const memeContainer = document.getElementById('meme-container');
             const textTop = document.getElementById('text-top').innerText;
             const textBottom = document.getElementById('text-bottom').innerText;
@@ -460,7 +458,7 @@ var WikiquoteApi = (function() {
             }
 
             // Cargar la imagen en un elemento de imagen antes de usar html2canvas
-            await new Promise(resolve => {
+             await new Promise(resolve => {
                 memeImage.onload = resolve;
                 memeImage.src = memeImage.src;  // Esto fuerza la carga de la imagen
             });
@@ -478,13 +476,13 @@ var WikiquoteApi = (function() {
             context.drawImage(memeImage, 0, 0, memeImage.width, memeImage.height);
 
             // Aplicar texto superior
-            context.font = '20px Arial';
+      	    context.font = '20px Arial';
             context.textAlign = 'center';
             context.fillStyle = textColor;  // Usar el color seleccionado
-            context.fillText(textTop, canvas.width / 2, 30);
+            wrapText(context, textTop, canvas.width / 2, 30, canvas.width - 20, 25);
 
             // Aplicar texto inferior
-            context.fillText(textBottom, canvas.width / 2, canvas.height - 10);
+            wrapText(context, textBottom, canvas.width / 2, canvas.height - 10, canvas.width - 20, 25);
 
             // Crear un enlace para descargar la imagen
             const link = document.createElement('a');
@@ -493,7 +491,26 @@ var WikiquoteApi = (function() {
             link.click();
         }
     }
+ function wrapText(context, text, x, y, maxWidth, lineHeight) {
+            const words = text.split(' ');
+            let line = '';
+            
+            for(let n = 0; n < words.length; n++) {
+                const testLine = line + words[n] + ' ';
+                const metrics = context.measureText(testLine);
+                const testWidth = metrics.width;
 
+                if (testWidth > maxWidth && n > 0) {
+                    context.fillText(line, x, y);
+                    line = words[n] + ' ';
+                    y += lineHeight;
+                } else {
+                    line = testLine;
+                }
+            }
+            
+            context.fillText(line, x, y);
+        }
     function loadImage(input) {
         const memeImage = document.getElementById('meme-image');
         const file = input.files[0];
