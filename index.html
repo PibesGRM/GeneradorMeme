@@ -440,13 +440,13 @@ var WikiquoteApi = (function() {
     
     <script>
 
-async function generateMeme() {
-            const memeContainer = document.getElementById('meme-container');
-            const textTop = document.getElementById('text-top').innerText;
-            const textBottom = document.getElementById('text-bottom').innerText;
-            const memeImage = document.getElementById('meme-image');
-            const messagePopup = document.getElementById('messagePopup');
-            const textColor = document.getElementById('text-color').value;
+	async function generateMeme() {
+	    const memeContainer = document.getElementById('meme-container');
+	    const textTop = document.getElementById('text-top').innerText;
+	    const textBottom = document.getElementById('text-bottom').innerText;
+	    const memeImage = document.getElementById('meme-image');
+	    const messagePopup = document.getElementById('messagePopup');
+	    const textColor = document.getElementById('text-color').value;
 
             if (!memeImage.complete || memeImage.naturalWidth === 0) {
                 // Mostrar el mensaje emergente si no se ha detectado una imagen cargada
