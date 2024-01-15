@@ -122,12 +122,12 @@
     <div class="message-popup" id="messagePopup">No se ha detectado imagen cargada</div>
 
     <script>
-        async function generateMeme() {
-            const memeContainer = document.getElementById('meme-container');
-            const textTop = document.getElementById('text-top').innerText;
-            const textBottom = document.getElementById('text-bottom').innerText;
-            const memeImage = document.getElementById('meme-image');
-            const messagePopup = document.getElementById('messagePopup');
+    async function generateMeme() {
+        const memeContainer = document.getElementById('meme-container');
+        const textTop = document.getElementById('text-top').innerText;
+        const textBottom = document.getElementById('text-bottom').innerText;
+        const memeImage = document.getElementById('meme-image');
+        const messagePopup = document.getElementById('messagePopup');
 
         if (!memeImage.complete || memeImage.naturalWidth === 0) {
             // Mostrar el mensaje emergente si no se ha detectado una imagen cargada
@@ -147,12 +147,8 @@
         // Esperar 100 milisegundos antes de generar el meme
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        // Obtener el ancho y alto de la imagen original
-        const imageWidth = memeImage.width;
-        const imageHeight = memeImage.height;
-
         // Utilizar html2canvas para convertir el contenido del contenedor en una imagen
-        const canvas = await html2canvas(memeContainer, { width: imageWidth, height: imageHeight });
+        const canvas = await html2canvas(memeContainer);
 
         // Crear un enlace para descargar la imagen
         const link = document.createElement('a');
