@@ -35,7 +35,7 @@
         }
     	#text-top, #text-bottom {
         max-width: 80%;
-        font-size: 3vw;
+        font-size: 2vw;
         white-space: normal; /* Permitir que el texto salte de línea automáticamente */
         overflow: hidden;
         text-overflow: ellipsis;
@@ -163,7 +163,10 @@
         <div id="text-top" class="meme-text" contenteditable="true">Texto superior</div>
         <div id="text-bottom" class="meme-text" contenteditable="true">Texto inferior</div>
     </div>
-    
+    <div id="color-panel">
+    <label for="text-color">Color del Texto:</label>
+    <input type="color" id="text-color" value="#ffffff">
+</div>
     <label for="upload">Cargar Imagen</label>
     <input type="file" id="upload" accept="image/*" onchange="loadImage(this)">
     
@@ -539,6 +542,19 @@ async function searchQuotes() {
     }
 }
 
+        // Función para cambiar color texto
+   document.getElementById('text-color').addEventListener('input', function () {
+        const textColor = this.value;
+        applyTextColor(textColor);
+    });
+
+    function applyTextColor(color) {
+        const textTop = document.getElementById('text-top');
+        const textBottom = document.getElementById('text-bottom');
+
+        textTop.style.color = color;
+        textBottom.style.color = color;
+    }
 
         
         // Función para actualizar la fecha en el footer
