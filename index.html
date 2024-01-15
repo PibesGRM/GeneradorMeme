@@ -147,8 +147,23 @@
         // Esperar 100 milisegundos antes de generar el meme
         await new Promise(resolve => setTimeout(resolve, 100));
 
-        // Utilizar html2canvas para convertir el contenido del contenedor en una imagen
-        const canvas = await html2canvas(memeContainer);
+        // Crear un lienzo del mismo tamaño que la imagen
+        const canvas = document.createElement('canvas');
+        canvas.width = memeImage.width;
+        canvas.height = memeImage.height;
+        const context = canvas.getContext('2d');
+
+        // Dibujar la imagen en el lienzo
+        context.drawImage(memeImage, 0, 0, memeImage.width, memeImage.height);
+
+        // Aplicar texto superior
+        context.font = '20px Arial';
+        context.fillStyle = 'white';
+        context.textAlign = 'center';
+        context.fillText(textTop, canvas.width / 2, 30);
+
+        // Aplicar texto inferior
+        context.fillText(textBottom, canvas.width / 2, canvas.height - 10);
 
         // Crear un enlace para descargar la imagen
         const link = document.createElement('a');
